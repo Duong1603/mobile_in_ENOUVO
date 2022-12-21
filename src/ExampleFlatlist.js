@@ -1,5 +1,13 @@
 import * as React from 'react';
-import {Button, FlatList, Image, StyleSheet, Text, View} from 'react-native';
+import {
+  Alert,
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 export default function ExampleFlatList() {
   const allpr = [
@@ -8,11 +16,11 @@ export default function ExampleFlatList() {
       name: 'Naa Nii',
       avatar: `https://reactnative.dev/img/tiny_logo.png`,
       time: '47w',
-      follow: 'followed by 15k',
+      follow: 'Followed by 15k',
     },
     {
       id: '2',
-      name: 'Naa Nii',
+      name: 'Naa ffffNii',
       avatar:
         'https://i.pinimg.com/564x/37/39/45/373945978bff3b5c9b0dfe27382f0120.jpg',
       time: '47w',
@@ -20,7 +28,7 @@ export default function ExampleFlatList() {
     },
     {
       id: '3',
-      name: 'Naa Nii',
+      name: 'Naahgdghd Nii',
       avatar:
         'https://i.pinimg.com/564x/37/39/45/373945978bff3b5c9b0dfe27382f0120.jpg',
       time: '47w',
@@ -28,7 +36,7 @@ export default function ExampleFlatList() {
     },
     {
       id: '4',
-      name: 'Naa Nii',
+      name: 'Naahsh Nii',
       avatar:
         'https://i.pinimg.com/564x/37/39/45/373945978bff3b5c9b0dfe27382f0120.jpg',
       time: '47w',
@@ -78,8 +86,16 @@ export default function ExampleFlatList() {
           </View>
           <Text style={styles.followCard}>{follow}</Text>
           <View style={styles.buttonCard}>
-            <Button title="confirm" color="#841584" />
-            <Button title="delete" color="#841584" />
+            <TouchableOpacity
+              style={styles.button_left}
+              onPress={() => Alert.alert('Successfull')}>
+              <Text style={styles.word_button_left}>Confirm</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button_right}
+              onPress={() => Alert.alert('faill')}>
+              <Text style={styles.word_button_right}>Delete</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -104,8 +120,8 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   avatarCard: {
-    width: 100,
-    height: 100,
+    width: 90,
+    height: 90,
     borderRadius: 50,
     margin: 10,
   },
@@ -116,11 +132,44 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   nameCard: {
-    fontSize: 22,
+    fontSize: 20,
     alignSelf: 'flex-start',
+    fontWeight: 'bold',
+    color: 'black',
+    width: 190,
   },
-  timeCard: {},
+  timeCard: {
+    alignSelf: 'flex-end',
+    // marginLeft: 5,
+    fontSize: 16,
+  },
+  followCard: {
+    fontSize: 18,
+  },
   buttonCard: {
     flexDirection: 'row',
+  },
+  button_left: {
+    width: 110,
+    alignItems: 'center',
+    backgroundColor: '#3982E4',
+    padding: 10,
+    borderRadius: 10,
+  },
+  button_right: {
+    width: 110,
+    alignItems: 'center',
+    backgroundColor: '#C9CCD1',
+    marginLeft: 10,
+    padding: 10,
+    borderRadius: 10,
+  },
+  word_button_left: {
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  word_button_right: {
+    fontWeight: 'bold',
+    color: 'black',
   },
 });
