@@ -3,6 +3,9 @@ import {
   Alert,
   FlatList,
   Image,
+  Modal,
+  Pressable,
+  RefreshControl,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -12,14 +15,14 @@ import {
 export default function ExampleFlatList() {
   const allpr = [
     {
-      id: '1',
+      id: 1,
       name: 'Naa Nii',
       avatar: `https://reactnative.dev/img/tiny_logo.png`,
       time: '47w',
       follow: 'Followed by 15k',
     },
     {
-      id: '2',
+      id: 2,
       name: 'Naa ffffNii',
       avatar:
         'https://danviet.mediacdn.vn/2021/5/5/1-16201893641271008335156.jpg',
@@ -27,15 +30,15 @@ export default function ExampleFlatList() {
       follow: '',
     },
     {
-      id: '3',
+      id: 3,
       name: 'Naahgdghd Nii',
       avatar:
-        'https://haycafe.vn/wp-content/uploads/2022/02/Anh-gai-xinh-cap-2-3.jpg',
+        'https://giaithuongtinhnguyen.vn/dien-vien-fukuda/hinh-anh-dien-vien-fukuda_7_7350_700.jpg',
       time: '47w',
       follow: '',
     },
     {
-      id: '4',
+      id: 4,
       name: 'Naahsh Nii',
       avatar:
         'https://luv.vn/wp-content/uploads/2021/08/hinh-anh-gai-xinh-71.jpg',
@@ -43,7 +46,7 @@ export default function ExampleFlatList() {
       follow: '',
     },
     {
-      id: '5',
+      id: 5,
       name: 'Naa Nii',
       avatar:
         'https://upload.wikimedia.org/wikipedia/commons/8/8c/Cristiano_Ronaldo_2018.jpg',
@@ -51,7 +54,7 @@ export default function ExampleFlatList() {
       follow: '',
     },
     {
-      id: '6',
+      id: 6,
       name: 'Naa Nii',
       avatar:
         'https://b.fssta.com/uploads/application/soccer/headshots/885.vresize.350.350.medium.14.png',
@@ -59,7 +62,7 @@ export default function ExampleFlatList() {
       follow: '',
     },
     {
-      id: '7',
+      id: 7,
       name: 'Naa Nii',
       avatar:
         'https://upload.wikimedia.org/wikipedia/en/thumb/7/7a/Manchester_United_FC_crest.svg/800px-Manchester_United_FC_crest.svg.png',
@@ -67,7 +70,7 @@ export default function ExampleFlatList() {
       follow: '',
     },
     {
-      id: '8',
+      id: 8,
       name: 'Naa Nii',
       avatar:
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6wMUznmg4JxQZECDFV5z4e60ghw62ynKyBQ&usqp=CAU',
@@ -99,10 +102,64 @@ export default function ExampleFlatList() {
     );
   };
 
+  const wait = timeout => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  };
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    wait(1000).then(() => setRefreshing(false));
+  }, []);
+  const Emty = () => {
+    return (
+      <View style={styles.emty}>
+        <Image
+          style={styles.imageEmty}
+          source={{
+            uri: 'https://t4.ftcdn.net/jpg/04/72/65/73/360_F_472657366_6kV9ztFQ3OkIuBCkjjL8qPmqnuagktXU.jpg',
+          }}
+        />
+        {/* <Text style={styles.imageEmty}>You have not data</Text> */}
+      </View>
+    );
+  };
+  const [modalVisible, setModalVisible] = React.useState(false);
+
+  const [pro, setPro] = React.useState(allpr);
+  // const handleRemove = id => {
+  //   const newItem = pro.findIndex(item => item.id == id);
+  //   console.log('first', delete allpr[newItem]);
+  //   setPro(newItem);
+  // };
+
+  const onDelete = id => {
+    const dataDelete = pro;
+    dataDelete.splice(
+      dataDelete.filter(item => item.id !== id),
+      1,
+    );
+    setPro(dataDelete);
+    console.log(dataDelete);
+  };
   return (
     <FlatList
       data={allpr}
       ListHeaderComponent={Header}
+      stickyHeaderIndices={[0]}
+      refreshing={allpr}
+      // onEndReached={}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+      ListEmptyComponent={Emty}
+      // ListEmptyComponent={() =>
+      //   allpr.length ? (
+      //     <View style={styles.centerEmptySet}>
+      //       <Text style={styles.emptyMessageStyle}>You have not data</Text>
+      //     </View>
+      //   ) : null
+      // }
       keyExtractor={item => item.id}
       renderItem={({item}) => (
         <View>
@@ -115,16 +172,46 @@ export default function ExampleFlatList() {
               </View>
               <Text style={styles.followCard}>{item.follow}</Text>
               <View style={styles.buttonCard}>
-                <TouchableOpacity
+                <Modal
+                  // animationType="slide"
+                  transparent={true}
+                  visible={modalVisible}
+                  onRequestClose={() => {
+                    Alert.alert('Modal has been closed.');
+                    setModalVisible(!modalVisible);
+                  }}>
+                  <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                      <Text style={styles.modalText}>Hello World!</Text>
+                      <View>
+                        <Pressable
+                          style={[styles.button, styles.buttonClose]}
+                          onPress={() => setModalVisible(!modalVisible)}>
+                          <Text style={styles.textStyle}>Cancel</Text>
+                        </Pressable>
+                        <Pressable
+                          style={[styles.button, styles.buttonClose]}
+                          onPress={() => onDelete(item.id)}>
+                          <Text
+                            onPress={() => setModalVisible(!modalVisible)}
+                            style={styles.textStyle}>
+                            Ok
+                          </Text>
+                        </Pressable>
+                      </View>
+                    </View>
+                  </View>
+                </Modal>
+                <Pressable
                   style={styles.button_left}
                   onPress={() => Alert.alert('Successfull')}>
                   <Text style={styles.word_button_left}>Confirm</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
+                </Pressable>
+                <Pressable
                   style={styles.button_right}
-                  onPress={() => Alert.alert('faill')}>
+                  onPress={() => setModalVisible(true)}>
                   <Text style={styles.word_button_right}>Delete</Text>
-                </TouchableOpacity>
+                </Pressable>
               </View>
             </View>
           </View>
@@ -267,5 +354,46 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  imageEmty: {
+    justifyContent: 'center',
+    textAlignVertical: 'center',
+    textAlign: 'center',
+    height: 500,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
   },
 });

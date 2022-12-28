@@ -4,6 +4,6 @@
 
 import {AppRegistry} from 'react-native';
 import {name as appName} from './app.json';
-import ExampleFlatList from './src/ExampleFlatlist';
+import ExampleuseIMperativeHandle from './src/ExampleuseIMperativeHandle';
 
-AppRegistry.registerComponent(appName, () => ExampleFlatList);
+AppRegistry.registerComponent(appName, () => ExampleuseIMperativeHandle);
